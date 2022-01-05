@@ -94,8 +94,8 @@ inds = np.vstack((ind0,ind1,ind2,ind3,ind4))
 cols = ['#AFFFAF','#0FFF0F','#FAFA00','#EA0000','#FF00FF']
 
 VR = 59.7
-TDSH = 12.5
-loc = 'Calera, AL'
+TDSH = 12.9
+loc = 'Mayfield, KY'
 
 X, Y, Z = np.mgrid[0:160:641j, 0:50:201j,50:220:171j]
 positions = np.vstack([X.ravel(), Y.ravel(), Z.ravel()])
@@ -238,32 +238,38 @@ ana_tags = ana_tags[sinds]
 print(f' Model Expected Windspeed: {np.round(np.dot(y,np.linspace(50,220,171)),2)} mph')
 print(f" Best Match Windspeed: {TDSdata[ana_inds[0],6]} mph \n")
 
-if len(ana_inds) < 5:
-    n = len(ana_inds)
+if len(ana_inds == 0):
+    print('No analogs found!')
 else:
-    n = 5
-print(f" Top {n} Analogs:")
-for i in range(n):
-    tag = ana_tags[i]
-    if TDSdata[ana_inds[i],6] < 86:
-        ef = 'EF0'
-        col = cols[0]
-    elif TDSdata[ana_inds[i],6] < 111:
-        ef = 'EF1'
-        col = cols[1]
-    elif TDSdata[ana_inds[i],6] < 136:
-        ef = 'EF2'
-        col = cols[2]
-    elif TDSdata[ana_inds[i],6] < 166:
-        ef = 'EF3'
-        col = cols[3]
-    elif TDSdata[ana_inds[i],6] < 201:
-        ef = 'EF4'
-        col = cols[4]
+    if len(ana_inds) < 5:
+        n = len(ana_inds)
     else:
-        ef = 'EF5'
-    print(f" #{i+1}: {int(TDSdata[ana_inds[i],6])} mph {ef} {tag[5]} County, {tag[4]} {tag[1]}/{tag[2]}/{tag[0]} @{str.rjust(tag[3],4,'0')}z")
-          
+        n = 5
+    print(f" Top {n} Analogs:")
+    for i in range(n):
+        tag = ana_tags[i]
+        if TDSdata[ana_inds[i],6] < 86:
+            ef = 'EF0'
+            col = cols[0]
+        elif TDSdata[ana_inds[i],6] < 111:
+            ef = 'EF1'
+            col = cols[1]
+        elif TDSdata[ana_inds[i],6] < 136:
+            ef = 'EF2'
+            col = cols[2]
+        elif TDSdata[ana_inds[i],6] < 166:
+            ef = 'EF3'
+            col = cols[3]
+        elif TDSdata[ana_inds[i],6] < 201:
+            ef = 'EF4'
+            col = cols[4]
+        else:
+            ef = 'EF5'
+        if tag[4] == 'LA':
+            print(f" #{i+1}: {int(TDSdata[ana_inds[i],6])} mph {ef} {tag[5]} Parish, {tag[4]} {tag[1]}/{tag[2]}/{tag[0]} @{str.rjust(tag[3],4,'0')}z")
+        else:
+            print(f" #{i+1}: {int(TDSdata[ana_inds[i],6])} mph {ef} {tag[5]} County, {tag[4]} {tag[1]}/{tag[2]}/{tag[0]} @{str.rjust(tag[3],4,'0')}z")
+              
 
 
 
